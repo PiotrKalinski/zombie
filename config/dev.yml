@@ -1,0 +1,13 @@
+provider:
+  environment:
+    LOG_LEVEL: 2
+custom:
+  region: "eu-west-1"
+  THUMBNAIL_HEIGHT: 500
+  THUMBNAIL_WIDTH: 500
+  DynamoCapacity:
+    ReadCapacityUnits: 5
+    WriteCapacityUnits: 5
+  nn_pipeline: 'DevNNPipeline'
+  NBPCurrencyUrl: 'http://api.nbp.pl/api/exchangerates/tables/C/today/'
+  ZombieMarketPricesUrl: 'https://zombie-items-api.herokuapp.com/api/items'

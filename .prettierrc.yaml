@@ -1,0 +1,3 @@
+singleQuote: true
+parser: babylon
+printWidth: 120
