@@ -1,5 +1,3 @@
-
-
 const uuidv4 = require('uuid/v4');
 const moment = require('moment');
 const dbClient = require('../utils/ddb.js');
@@ -13,22 +11,21 @@ module.exports.handler = async (event, context, callback) => {
   log.info('Context => ', context);
 
   const {
-    body: {
-      name,
-    },
+    body: { zombieName },
   } = event;
   const zombieId = uuidv4();
-  const checkIfExists = await dbClient.getObjectByFileName(ZOMBIE_TABLE, name);
-  if (checkIfExists.Item !== undefined) {
-    return response.ZombieAlreadyExists('error', callback);
-  }
+
   const zombieObj = {
     id: zombieId,
-    zombiename: name,
+    zombiename: zombieName,
     created: moment().format('MMMM Do YYYY, h:mm:ss a'),
     equipment: [],
     equipmentPrice: [],
   };
+  const checkIfExists = await dbClient.getZombieByName(ZOMBIE_TABLE, zombieName);
+  if (checkIfExists !== null) {
+    return response.getZombieByName('error', callback);
+  }
   try {
     await dbClient.put(ZOMBIE_TABLE, zombieObj);
     return response.OK(JSON.stringify(zombieObj), callback);

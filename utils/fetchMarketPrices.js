@@ -4,12 +4,14 @@ const dbClient = require('./ddb.js');
 
 module.exports = async function fetchMarketPrices() {
   const marketData = await axios.get(MARKET_URL);
-  await Promise.all(marketData.data.items.map(async (item) => {
-    const dbParams = {
-      id: item.id,
-      itemName: item.name,
-      price: item.price,
-    };
-    await dbClient.put(ITEM_TABLE, dbParams);
-  }));
+  await Promise.all(
+    marketData.data.items.map(async (item) => {
+      const dbParams = {
+        id: item.id,
+        itemName: item.name,
+        price: item.price,
+      };
+      await dbClient.put(ITEM_TABLE, dbParams);
+    }),
+  );
 };

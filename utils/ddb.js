@@ -14,15 +14,6 @@ exports.get = (table, key) => {
   return dbClient.get(params).promise();
 };
 
-exports.getByZombieId = (table, key) => {
-  const params = {
-    TableName: table,
-    Key: { zombiename: key },
-  };
-  log.info('DDB Get Item ->', params);
-  return dbClient.get(params).promise();
-};
-
 
 exports.put = (table, item) => {
   const params = {
@@ -43,12 +34,10 @@ exports.delete = (table, key) => {
   return dbClient.delete(params).promise();
 };
 
-
 exports.update = (item) => {
   log.info('DDB Put Item ->', item);
   return dbClient.update(item).promise();
 };
-
 
 exports.checkTable = (table) => {
   const params = {
@@ -57,7 +46,7 @@ exports.checkTable = (table) => {
   return db.describeTable(params).promise();
 };
 
-exports.getZombie = async (table, key) => new Promise(((resolve) => {
+exports.getZombieByName = async (table, key) => new Promise((resolve) => {
   const queryParams = {
     TableName: table,
     IndexName: 'myGSI',
@@ -74,4 +63,4 @@ exports.getZombie = async (table, key) => new Promise(((resolve) => {
     };
     return resolve(dbClient.get(params).promise());
   });
-}));
+});

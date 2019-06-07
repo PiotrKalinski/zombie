@@ -4,7 +4,6 @@ const response = require('../utils/response.js');
 
 const { ZOMBIE_TABLE } = process.env;
 
-
 module.exports.handler = async (event, context, callback) => {
   log.info('Event => ', event);
   log.info('Context => ', context);
