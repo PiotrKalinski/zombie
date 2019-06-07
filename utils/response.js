@@ -35,7 +35,6 @@ exports.OkNoBody = (callback) => {
   callback(null, response);
 };
 
-
 exports.NotFound = (msg, callback) => {
   const response = {
     statusCode: 404,
@@ -59,7 +58,6 @@ exports.BadRequest = (error, callback) => {
   log.error('HTTP 400:', error);
   callback(null, response);
 };
-
 
 exports.Exception = (error, callback) => {
   const response = {

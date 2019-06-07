@@ -9,9 +9,7 @@ module.exports.handler = async (event, context, callback) => {
   log.info('Event => ', event);
   log.info('Context => ', context);
   const {
-    body: {
-      zombieId, itemId,
-    },
+    body: { zombieId, itemId },
   } = event;
 
   const checkTableStatus = await dbClient.checkTable(ITEM_TABLE);

@@ -1,5 +1,3 @@
-
-
 const { ZOMBIE_TABLE, ITEM_TABLE } = process.env;
 const dbClient = require('../utils/ddb.js');
 const log = require('../utils/log.js');
@@ -10,11 +8,8 @@ module.exports.handler = async (event, context, callback) => {
   log.info('Event => ', event);
   log.info('Context => ', context);
   const {
-    body: {
-      zombieId, itemId,
-    },
+    body: { zombieId, itemId },
   } = event;
-
 
   try {
     const zombieObject = await dbClient.get(ZOMBIE_TABLE, zombieId);
