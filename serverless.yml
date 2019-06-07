@@ -82,6 +82,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:Query
         - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
       Resource:
         - "Fn::GetAtt": [ ItemList, Arn ]
   
@@ -108,6 +109,7 @@ functions:
   createZombie:
     handler: functions/createZombie.handler
     memorySize: 128
+    timeout: 30 # optional, in seconds, default is 6
     events:
       - http:
           method: post
@@ -118,6 +120,7 @@ functions:
   removeZombie:
     handler: functions/removeZombie.handler
     memorySize: 128
+    timeout: 30 # optional, in seconds, default is 6
     events:
       - http:
           method: delete
@@ -128,6 +131,7 @@ functions:
   addEquipment:
     handler: functions/addEquipment.handler
     memorySize: 128
+    timeout: 30 # optional, in seconds, default is 6
     events:
       - http:
           method: post
@@ -138,6 +142,7 @@ functions:
   removeEquipment:
     handler: functions/removeItemFromEquipment.handler
     memorySize: 128
+    timeout: 30 # optional, in seconds, default is 6
     events:
       - http:
           method: put
@@ -145,6 +150,16 @@ functions:
           cors: true
           integration: lambda
  
+  getZombie:
+    handler: functions/getZombieData.handler
+    memorySize: 128
+    timeout: 30 # optional, in seconds, default is 6
+    events:
+      - http:
+          method: get
+          path: zombie/{zombieId}
+          cors: true
+          integration: lambda
           
 
 

@@ -3,6 +3,7 @@ const AWS = require('aws-sdk');
 const log = require('./log.js');
 
 const dbClient = new AWS.DynamoDB.DocumentClient({ Region: process.env.MY_REGION });
+const db = new AWS.DynamoDB({ Region: process.env.MY_REGION });
 
 exports.getAll = (table, user, startKey) => {
   const params = {
@@ -60,4 +61,12 @@ exports.delete = (table, key) => {
 exports.update = (item) => {
   log.info('DDB Put Item ->', item);
   return dbClient.update(item).promise();
+};
+
+
+exports.checkTable = (table) => {
+  const params = {
+    TableName: table,
+  };
+  return db.describeTable(params).promise();
 };

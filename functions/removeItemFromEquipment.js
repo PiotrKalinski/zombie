@@ -16,26 +16,32 @@ module.exports.handler = async (event, context, callback) => {
     },
   } = event;
 
-  const zombieObject = await dbClient.get(ZOMBIE_TABLE, zombieId);
-  const itemObject = await dbClient.get(ITEM_TABLE, itemId);
-  if (itemObject.Item === undefined) {
-    return response.NotFound('Item not found', callback);
-  }
 
-  const newEquipentList = zombieObject.Item.equipment.filter(data => data.id === 2);
-  const updateParams = {
-    TableName: 'zombie-service-dev-ZombieList-IMEXLQ1KV3Q2',
-    Key: {
-      id: zombieObject.Item.id,
-    },
-    UpdateExpression: 'set equipment = :s',
-    ExpressionAttributeValues: {
-      ':s': newEquipentList,
-    },
-    ReturnValues: 'UPDATED_NEW',
-  };
-  await dbClient.update(updateParams);
-  const combinedPrice = newEquipentList.reduce((acc, obj) => acc + obj.price, 0); // 7
-  const priceList = await getPriceList(combinedPrice);
-  return response.OK(JSON.stringify({ result: priceList }), callback);
+  try {
+    const zombieObject = await dbClient.get(ZOMBIE_TABLE, zombieId);
+    const itemObject = await dbClient.get(ITEM_TABLE, itemId);
+    if (itemObject.Item === undefined) {
+      return response.NotFound('Item not found', callback);
+    }
+
+    const newEquipentList = zombieObject.Item.equipment.filter(data => data.id !== itemId);
+    const updateParams = {
+      TableName: ZOMBIE_TABLE,
+      Key: {
+        id: zombieObject.Item.id,
+      },
+      UpdateExpression: 'set equipment = :s',
+      ExpressionAttributeValues: {
+        ':s': newEquipentList,
+      },
+      ReturnValues: 'UPDATED_NEW',
+    };
+    await dbClient.update(updateParams);
+    const combinedPrice = newEquipentList.reduce((acc, obj) => acc + obj.price, 0); // 7
+    const priceList = await getPriceList(combinedPrice);
+    return response.OK(JSON.stringify(priceList), callback);
+  } catch (error) {
+    log.error(error);
+    return response.BadRequest(JSON.stringify(error), callback);
+  }
 };

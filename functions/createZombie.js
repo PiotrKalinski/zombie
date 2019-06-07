@@ -9,8 +9,8 @@ const { ZOMBIE_TABLE } = process.env;
 
 
 module.exports.handler = async (event, context, callback) => {
-  console.log('Event => ', event);
-  console.log('Context => ', context);
+  log.info('Event => ', event);
+  log.info('Context => ', context);
 
   const {
     body: {
@@ -23,6 +23,7 @@ module.exports.handler = async (event, context, callback) => {
     zombiename: name,
     created: moment().format('MMMM Do YYYY, h:mm:ss a'),
     equipment: [],
+    equipmentPrice: [],
   };
   try {
     await dbClient.put(ZOMBIE_TABLE, zombieObj);
