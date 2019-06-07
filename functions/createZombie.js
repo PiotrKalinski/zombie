@@ -4,9 +4,9 @@ const uuidv4 = require('uuid/v4');
 const moment = require('moment');
 const dbClient = require('../utils/ddb.js');
 const log = require('../utils/log.js');
+const response = require('../utils/response.js');
 
 const { ZOMBIE_TABLE } = process.env;
-
 
 module.exports.handler = async (event, context, callback) => {
   log.info('Event => ', event);
@@ -18,6 +18,10 @@ module.exports.handler = async (event, context, callback) => {
     },
   } = event;
   const zombieId = uuidv4();
+  const checkIfExists = await dbClient.getObjectByFileName(ZOMBIE_TABLE, name);
+  if (checkIfExists.Item !== undefined) {
+    return response.ZombieAlreadyExists('error', callback);
+  }
   const zombieObj = {
     id: zombieId,
     zombiename: name,
@@ -27,8 +31,8 @@ module.exports.handler = async (event, context, callback) => {
   };
   try {
     await dbClient.put(ZOMBIE_TABLE, zombieObj);
-    callback(null, { zombieObj });
-  } catch (err) {
-    log.error(err);
+    return response.OK(JSON.stringify(zombieObj), callback);
+  } catch (error) {
+    return response.BadRequest(JSON.stringify(error), callback);
   }
 };

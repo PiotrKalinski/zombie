@@ -12,7 +12,6 @@ module.exports.handler = async (event, context, callback) => {
   const {
     body: {
       zombieId, itemId,
-
     },
   } = event;
 

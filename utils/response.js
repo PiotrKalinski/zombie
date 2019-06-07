@@ -96,3 +96,15 @@ exports.ItemAlreadyEquipped = (error, callback) => {
   log.error('HTTP 500:', error);
   callback(null, response);
 };
+
+exports.ZombieAlreadyExists = (error, callback) => {
+  const response = {
+    statusCode: 400,
+    headers: {
+      'Access-Control-Allow-Origin': cors,
+    },
+    body: JSON.stringify({ result: 'Item already equipped', message: error }),
+  };
+  log.error('HTTP 500:', error);
+  callback(null, response);
+};

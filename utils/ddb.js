@@ -5,20 +5,6 @@ const log = require('./log.js');
 const dbClient = new AWS.DynamoDB.DocumentClient({ Region: process.env.MY_REGION });
 const db = new AWS.DynamoDB({ Region: process.env.MY_REGION });
 
-exports.getAll = (table, user, startKey) => {
-  const params = {
-    TableName: table,
-    FilterExpression: '#u = :u',
-    ExpressionAttributeNames: {
-      '#u': 'owner',
-    },
-    ExpressionAttributeValues: { ':u': `user:${user}` },
-  };
-  if (startKey) params.ExclusiveStartKey = startKey;
-  log.info('DDB GetAll ->', params);
-  return dbClient.scan(params).promise();
-};
-
 exports.get = (table, key) => {
   const params = {
     TableName: table,
@@ -31,7 +17,7 @@ exports.get = (table, key) => {
 exports.getByZombieId = (table, key) => {
   const params = {
     TableName: table,
-    Key: { owner: key },
+    Key: { zombiename: key },
   };
   log.info('DDB Get Item ->', params);
   return dbClient.get(params).promise();
@@ -70,3 +56,22 @@ exports.checkTable = (table) => {
   };
   return db.describeTable(params).promise();
 };
+
+exports.getZombie = async (table, key) => new Promise(((resolve) => {
+  const queryParams = {
+    TableName: table,
+    IndexName: 'myGSI',
+    KeyConditionExpression: 'zombiename = :id',
+    ExpressionAttributeValues: {
+      ':id': key,
+    },
+  };
+  dbClient.query(queryParams, (error, result) => {
+    if (error || result.Count === 0) return resolve(null);
+    const params = {
+      Key: { id: result.Items[0].id },
+      TableName: table,
+    };
+    return resolve(dbClient.get(params).promise());
+  });
+}));
