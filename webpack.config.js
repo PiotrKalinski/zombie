@@ -12,11 +12,11 @@ module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
   optimization: {
     // We no not want to minimize our code.
-    minimize: false
+    minimize: false,
   },
   performance: {
     // Turn off size warnings for entry points
-    hints: false
+    hints: false,
   },
   // Run babel on all .js files and skip those in node_modules
   module: {
@@ -25,8 +25,8 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         include: __dirname,
-        exclude: /node_modules/
-      }
-    ]
-  }
+        exclude: /node_modules/,
+      },
+    ],
+  },
 };

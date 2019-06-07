@@ -54,7 +54,7 @@ exports.checkTable = (table) => {
   return db.describeTable(params).promise();
 };
 
-exports.getZombie = async (table, key) => new Promise((resolve) => {
+exports.getZombieByName = async (table, key) => new Promise((resolve) => {
   const queryParams = {
     TableName: table,
     IndexName: 'myGSI',
