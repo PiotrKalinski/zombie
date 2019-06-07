@@ -137,11 +137,11 @@ provider:
         - dynamodb:DeleteItem
         - dynamodb:DescribeTable
       Resource:        
-       - "Fn::GetAtt": ["Zombieist", "Arn" ] 
+       - "Fn::GetAtt": ["ZombieList", "Arn" ] 
        - Fn::Join:
          - "/"
          -
-           - "Fn::GetAtt": ["Zombieist", "Arn" ] 
+           - "Fn::GetAtt": ["ZombieList", "Arn" ] 
            - "index/*"
 
       Effect: Allow

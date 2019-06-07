@@ -5,8 +5,7 @@ const log = require('../utils/log.js');
 const response = require('../utils/response.js');
 
 const { ZOMBIE_TABLE } = process.env;
-// const ZOMBIE_TABLE = 'zombie-service-dev-ZombieList-IMEXLQ1KV3Q2';
-// const zombieName = 'xxxxxxxxxxx';
+
 module.exports.handler = async (event, context, callback) => {
   log.info('Event => ', event);
   log.info('Context => ', context);
@@ -23,7 +22,10 @@ module.exports.handler = async (event, context, callback) => {
     equipment: [],
     equipmentPrice: [],
   };
-
+  const checkIfExists = await dbClient.getZombieByName(ZOMBIE_TABLE, zombieName);
+  if (checkIfExists !== null) {
+    return response.getZombieByName('error', callback);
+  }
   try {
     await dbClient.put(ZOMBIE_TABLE, zombieObj);
     return response.OK(JSON.stringify(zombieObj), callback);

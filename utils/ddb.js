@@ -14,14 +14,6 @@ exports.get = (table, key) => {
   return dbClient.get(params).promise();
 };
 
-exports.getByZombieId = (table, key) => {
-  const params = {
-    TableName: table,
-    Key: { zombiename: key },
-  };
-  log.info('DDB Get Item ->', params);
-  return dbClient.get(params).promise();
-};
 
 exports.put = (table, item) => {
   const params = {
@@ -54,7 +46,7 @@ exports.checkTable = (table) => {
   return db.describeTable(params).promise();
 };
 
-exports.getZombieByName = async (table, key) => new Promise((resolve, reject) => {
+exports.getZombieByName = async (table, key) => new Promise((resolve) => {
   const queryParams = {
     TableName: table,
     IndexName: 'myGSI',
