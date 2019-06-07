@@ -24,6 +24,9 @@ module.exports.handler = async (event, context, callback) => {
   if (itemObject.Item === undefined) {
     return response.NotFound('Item not found', callback);
   }
+  if (zombieObject.Item === undefined) {
+    return response.NotFound('Zombie not found', callback);
+  }
   const checkIfItemAlreadyEquipped = zombieObject.Item.equipment
     .find(o => o.id === itemId) !== undefined;
   if (checkIfItemAlreadyEquipped) {

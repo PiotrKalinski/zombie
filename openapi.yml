@@ -1,0 +1,182 @@
+openapi: 3.0.0
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        body:
+          type: object
+    FailureResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        body:
+          type: object
+    CreateZombiePostRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    DeleteZombieRequest:
+      type: object
+      properties:
+        zombieId:
+          type: string
+    AddEquipmentRequest:
+      type: object
+      properties:
+        zombieId:
+          type: string
+        itemId:
+          type: number
+    RemoveEquipmentRequest:
+      type: object
+      properties:
+        zombieId:
+          type: string
+        itemId:
+          type: number
+  securitySchemes: {}
+info:
+  title: ''
+  description: ''
+  version: 95442c5e-bd99-4914-a6f9-c2e1ab67bd24
+servers: []
+paths:
+  /zombie:
+    post:
+      operationId: createZombie
+      summary: Create new zombie.
+      tags:
+        - ekyc
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateZombiePostRequest'
+        description: You need to pass zombiename
+      parameters: []
+      responses:
+        '200':
+          description: Successfully created new zombie record in server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Can't create new zombie record in server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+  '/zombie/{zombieId}':
+    delete:
+      operationId: removeZombie
+      summary: Delete zombie.
+      tags:
+        - ekyc
+      parameters:
+        - name: zombieId
+          in: path
+          description: The zombieId for a user to delete
+          required: true
+          schema:
+            type: string
+            pattern: '^[-a-z0-9_]+$'
+      responses:
+        '200':
+          description: Successfully deleted zombie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Can't delete zombie record in server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+    get:
+      operationId: getZombie
+      summary: Delete zombie.
+      tags:
+        - ekyc
+      parameters:
+        - name: zombieId
+          in: path
+          description: The zombieId for a user to delete
+          required: true
+          schema:
+            type: string
+            pattern: '^[-a-z0-9_]+$'
+      responses:
+        '200':
+          description: Successfully deleted zombie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Can't delete zombie record in server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+  /zombie/eq:
+    post:
+      operationId: addEquipment
+      summary: Add equipent.
+      tags:
+        - ekyc
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddEquipmentRequest'
+        description: You need to pass zombieId and itemId
+      parameters: []
+      responses:
+        '200':
+          description: Successfully deleted zombie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Can't delete zombie record in server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'
+    put:
+      operationId: removeEquipment
+      summary: Remove item from equipment.
+      tags:
+        - ekyc
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveEquipmentRequest'
+        description: You need to pass zombiename and itemId
+      parameters: []
+      responses:
+        '200':
+          description: Successfully removed item from zombie equipment.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Can't remove.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponse'

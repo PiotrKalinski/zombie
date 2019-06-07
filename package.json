@@ -42,6 +42,7 @@
     "moment": "^2.24.0",
     "prettier": "^1.13.5",
     "serverless-dynamodb-local": "^0.2.38",
+    "serverless-openapi-documentation": "github:kzhou57/serverless-openapi-documentation",
     "serverless-plugin-custom-roles": "^1.1.0",
     "serverless-plugin-existing-s3": "^2.3.3",
     "serverless-plugin-include-dependencies": "^3.2.1",
@@ -52,7 +53,8 @@
   },
   "scripts": {
     "test": "jest --no-cache",
-    "format": "prettier --write \"**/*.js?(x)\""
+    "format": "prettier --write \"**/*.js?(x)\"",
+    "docs": "serverless openapi generate"
   },
   "jest": {
     "transform": {

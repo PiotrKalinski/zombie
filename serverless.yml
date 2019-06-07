@@ -18,20 +18,68 @@ custom:
   DynamoCapacityJobs: zombie-${self:custom.stage}-equipment
   NBPCurrencyUrl: ${file(config/${self:custom.stage}.yml):custom.NBPCurrencyUrl}
   ZombieMarketUrl: ${file(config/${self:custom.stage}.yml):custom.ZombieMarketPricesUrl}
-  custom:
-  dynamodb:
-  # If you only want to use DynamoDB Local in some stages, declare them here
-    stages:
-      - dev
-    start:
-      port: 8000
-      inMemory: true
-      heapInitial: 200m
-      heapMax: 1g
-      migrate: true
-      seed: true
-      convertEmptyValues: true
-
+  documentation:
+    models:
+      - name: SuccessResponse
+        contentType: "application/json"
+        schema:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          type: object
+          properties:
+            statusCode:
+              type: integer
+            message:
+              type: string
+            body:
+              type: object
+      - name: FailureResponse
+        contentType: "application/json"
+        schema:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          type: object
+          properties:
+            statusCode:
+              type: integer
+            message:
+              type: string
+            body:
+              type: object
+      - name: CreateZombiePostRequest
+        contentType: "application/json"
+        schema:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          type: object
+          properties:
+            name:
+              type: string
+      - name: DeleteZombieRequest
+        contentType: "application/json"
+        schema:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          type: object
+          properties:
+            zombieId:
+              type: string
+      - name: AddEquipmentRequest
+        contentType: "application/json"
+        schema:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          type: object
+          properties:
+            zombieId:
+              type: string
+            itemId:
+              type: number
+      - name: RemoveEquipmentRequest
+        contentType: "application/json"
+        schema:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          type: object
+          properties:
+            zombieId:
+              type: string
+            itemId:
+              type: number
 #   ██████╗ ██████╗  ██████╗ ██╗   ██╗██╗██████╗ ███████╗██████╗
 #   ██╔══██╗██╔══██╗██╔═══██╗██║   ██║██║██╔══██╗██╔════╝██╔══██╗
 #   ██████╔╝██████╔╝██║   ██║██║   ██║██║██║  ██║█████╗  ██████╔╝
@@ -116,6 +164,24 @@ functions:
           path: zombie
           cors: true
           integration: lambda
+          documentation:
+            tags: ['ekyc']
+            summary: "Create new zombie."
+            requestBody:
+              description: "You need to pass zombiename"
+            requestModels:
+              application/json: "CreateZombiePostRequest"
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: "Successfully created new zombie record in server."
+                responseModels:
+                  application/json: SuccessResponse
+              - statusCode: '400'
+                responseBody:
+                  description: "Can't create new zombie record in server."
+                responseModels:
+                  application/json: FailureResponse
 
   removeZombie:
     handler: functions/removeZombie.handler
@@ -127,6 +193,26 @@ functions:
           path: zombie/{zombieId}
           cors: true
           integration: lambda
+          documentation:
+            tags: ['ekyc']
+            summary: "Delete zombie."
+            pathParams:
+              - name: "zombieId"
+                description: "The zombieId for a user to delete"
+                schema:
+                  type: "string"
+                  pattern: "^[-a-z0-9_]+$"
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: "Successfully deleted zombie."
+                responseModels:
+                  application/json: SuccessResponse
+              - statusCode: '400'
+                responseBody:
+                  description: "Can't delete zombie record in server."
+                responseModels:
+                  application/json: FailureResponse
 
   addEquipment:
     handler: functions/addEquipment.handler
@@ -138,6 +224,24 @@ functions:
           path: zombie/eq
           cors: true
           integration: lambda
+          documentation:
+              tags: ['ekyc']
+              summary: "Add equipent."
+              requestBody:
+                description: "You need to pass zombieId and itemId"
+              requestModels:
+                application/json: "AddEquipmentRequest"
+              methodResponses:
+                - statusCode: '200'
+                  responseBody:
+                    description: "Successfully deleted zombie."
+                  responseModels:
+                    application/json: SuccessResponse
+                - statusCode: '400'
+                  responseBody:
+                    description: "Can't delete zombie record in server."
+                  responseModels:
+                    application/json: FailureResponse
 
   removeEquipment:
     handler: functions/removeItemFromEquipment.handler
@@ -149,6 +253,24 @@ functions:
           path: zombie/eq
           cors: true
           integration: lambda
+          documentation:
+            tags: ['ekyc']
+            summary: "Remove item from equipment."
+            requestBody:
+              description: "You need to pass zombiename and itemId"
+            requestModels:
+              application/json: "RemoveEquipmentRequest"
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: "Successfully removed item from zombie equipment."
+                responseModels:
+                  application/json: SuccessResponse
+              - statusCode: '400'
+                responseBody:
+                  description: "Can't remove."
+                responseModels:
+                  application/json: FailureResponse
  
   getZombie:
     handler: functions/getZombieData.handler
@@ -160,7 +282,26 @@ functions:
           path: zombie/{zombieId}
           cors: true
           integration: lambda
-          
+          documentation:
+            tags: ['ekyc']
+            summary: "Delete zombie."
+            pathParams:
+              - name: "zombieId"
+                description: "The zombieId for a user to delete"
+                schema:
+                  type: "string"
+                  pattern: "^[-a-z0-9_]+$"
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: "Successfully deleted zombie."
+                responseModels:
+                  application/json: SuccessResponse
+              - statusCode: '400'
+                responseBody:
+                  description: "Can't delete zombie record in server."
+                responseModels:
+                  application/json: FailureResponse
 
 
 # ██████╗ ███████╗███████╗ ██████╗ ██╗   ██╗██████╗  ██████╗███████╗███████╗
@@ -226,10 +367,9 @@ resources:
 
 plugins:
   - serverless-plugin-include-dependencies
-  - serverless-plugin-custom-roles
-  - serverless-plugin-existing-s3
   - serverless-offline
   - serverless-dynamodb-local
+  - serverless-openapi-documentation
 
 #   ██████╗  █████╗  ██████╗██╗  ██╗ █████╗  ██████╗ ███████╗
 #   ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔══██╗██╔════╝ ██╔════╝
