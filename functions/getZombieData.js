@@ -10,8 +10,8 @@ module.exports.handler = async (event, context, callback) => {
   log.info('Context => ', context);
   if (event.path && event.path.zombieId) {
     try {
-      const checkTableStatus = await dbClient.checkTable(ITEM_TABLE);
-      if (checkTableStatus.Table.ItemCount === 0) {
+      const tableStatus = await dbClient.checkTable(ITEM_TABLE);
+      if (tableStatus.Table.ItemCount === 0) {
         await fetchMarketPrices();
       }
       const zombieObject = await dbClient.get(ZOMBIE_TABLE, event.path.zombieId);

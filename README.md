@@ -1,6 +1,6 @@
 # Zombie
 
-Repository for zombies and equipent.
+Repository for zombies and equipment.
 
 ## Getting Started
 

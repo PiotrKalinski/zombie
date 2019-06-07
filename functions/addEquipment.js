@@ -12,8 +12,8 @@ module.exports.handler = async (event, context, callback) => {
     body: { zombieId, itemId },
   } = event;
 
-  const checkTableStatus = await dbClient.checkTable(ITEM_TABLE);
-  if (checkTableStatus.Table.ItemCount === 0) {
+  const tableStatus = await dbClient.checkTable(ITEM_TABLE);
+  if (tableStatus.Table.ItemCount === 0) {
     await fetchMarketPrices();
   }
   const zombieObject = await dbClient.get(ZOMBIE_TABLE, zombieId);
@@ -34,10 +34,10 @@ module.exports.handler = async (event, context, callback) => {
   if (itemCount > 5) {
     return response.MaximumItemCount('error', callback);
   }
-  const newEquipentList = [...zombieObject.Item.equipment, itemObject.Item];
+  const newequipmentList = [...zombieObject.Item.equipment, itemObject.Item];
 
   try {
-    const combinedPrice = newEquipentList.reduce((acc, obj) => acc + obj.price, 0);
+    const combinedPrice = newequipmentList.reduce((acc, obj) => acc + obj.price, 0);
     const equipmentPrice = await getPriceList(combinedPrice);
     const updateParams = {
       TableName: ZOMBIE_TABLE,
@@ -46,7 +46,7 @@ module.exports.handler = async (event, context, callback) => {
       },
       UpdateExpression: 'set equipment = :s, price = :p',
       ExpressionAttributeValues: {
-        ':s': newEquipentList,
+        ':s': newequipmentList,
         ':p': equipmentPrice,
       },
       ReturnValues: 'UPDATED_NEW',

@@ -18,7 +18,7 @@ module.exports.handler = async (event, context, callback) => {
       return response.NotFound('Item not found', callback);
     }
 
-    const newEquipentList = zombieObject.Item.equipment.filter(data => data.id !== itemId);
+    const newequipmentList = zombieObject.Item.equipment.filter(data => data.id !== itemId);
     const updateParams = {
       TableName: ZOMBIE_TABLE,
       Key: {
@@ -26,12 +26,12 @@ module.exports.handler = async (event, context, callback) => {
       },
       UpdateExpression: 'set equipment = :s',
       ExpressionAttributeValues: {
-        ':s': newEquipentList,
+        ':s': newequipmentList,
       },
       ReturnValues: 'UPDATED_NEW',
     };
     await dbClient.update(updateParams);
-    const combinedPrice = newEquipentList.reduce((acc, obj) => acc + obj.price, 0); // 7
+    const combinedPrice = newequipmentList.reduce((acc, obj) => acc + obj.price, 0); // 7
     const priceList = await getPriceList(combinedPrice);
     return response.OK(JSON.stringify(priceList), callback);
   } catch (error) {

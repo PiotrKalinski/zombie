@@ -132,7 +132,7 @@ paths:
   /zombie/eq:
     post:
       operationId: addEquipment
-      summary: Add equipent.
+      summary: Add equipment.
       tags:
         - ekyc
       requestBody:

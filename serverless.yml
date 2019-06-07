@@ -50,7 +50,7 @@ custom:
           $schema: "http://json-schema.org/draft-04/schema#"
           type: object
           properties:
-            name:
+            zombieName:
               type: string
       - name: DeleteZombieRequest
         contentType: "application/json"
@@ -119,9 +119,14 @@ provider:
         - dynamodb:Scan
         - dynamodb:Query
         - dynamodb:DeleteItem
-      Resource:
-        - "Fn::GetAtt": [ ZombieList, Arn ]
-  
+      Resource:        
+       - "Fn::GetAtt": ["ItemList", "Arn" ] 
+       - Fn::Join:
+         - "/"
+         -
+           - "Fn::GetAtt": ["ItemList", "Arn" ] 
+           - "index/*"
+
       Effect: Allow
     - Action:
         - dynamodb:GetItem
@@ -131,9 +136,14 @@ provider:
         - dynamodb:Query
         - dynamodb:DeleteItem
         - dynamodb:DescribeTable
-      Resource:
-        - "Fn::GetAtt": [ ItemList, Arn ]
-  
+      Resource:        
+       - "Fn::GetAtt": ["Zombieist", "Arn" ] 
+       - Fn::Join:
+         - "/"
+         -
+           - "Fn::GetAtt": ["Zombieist", "Arn" ] 
+           - "index/*"
+
       Effect: Allow
 
 
@@ -226,7 +236,7 @@ functions:
           integration: lambda
           documentation:
               tags: ['ekyc']
-              summary: "Add equipent."
+              summary: "Add equipment."
               requestBody:
                 description: "You need to pass zombieId and itemId"
               requestModels:
