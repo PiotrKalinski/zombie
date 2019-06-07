@@ -22,7 +22,7 @@ components:
     CreateZombiePostRequest:
       type: object
       properties:
-        name:
+        zombieName:
           type: string
     DeleteZombieRequest:
       type: object
@@ -47,7 +47,7 @@ components:
 info:
   title: ''
   description: ''
-  version: 95442c5e-bd99-4914-a6f9-c2e1ab67bd24
+  version: f788aa0c-c990-47c9-b526-07cc511e4029
 servers: []
 paths:
   /zombie:
