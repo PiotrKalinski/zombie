@@ -31,6 +31,29 @@ sls invoke localy -s stageName -f functionName
 
 End with an example of getting some data out of the system or using it for a little demo
 
+## Endpoints
+
+  POST - https://8h6i3j4is8.execute-api.eu-west-1.amazonaws.com/dev/zombie
+
+Create zombie
+
+  DELETE - https://8h6i3j4is8.execute-api.eu-west-1.amazonaws.com/dev/zombie/{zombieId}
+
+  Delete zombie
+
+  POST - https://8h6i3j4is8.execute-api.eu-west-1.amazonaws.com/dev/zombie/eq
+
+  Add EQ for zombie
+  PUT - https://8h6i3j4is8.execute-api.eu-west-1.amazonaws.com/dev/zombie/eq
+
+  Delete EQ from zombie
+  GET - https://8h6i3j4is8.execute-api.eu-west-1.amazonaws.com/dev/zombie/{zombieId}
+
+  Get Zombie data
+
+
+
+
 ## Running the tests
 
 TODO
@@ -43,6 +66,8 @@ To generate Swagger OpenApi file run
 ```
 npm run docs
 ```
+
+and open openapi.yml
 
 
 ## Deployment
