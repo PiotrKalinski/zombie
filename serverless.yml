@@ -119,6 +119,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:Query
         - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
       Resource:        
        - "Fn::GetAtt": ["ItemList", "Arn" ] 
        - Fn::Join:
