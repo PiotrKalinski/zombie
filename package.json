@@ -28,7 +28,7 @@
   "dependencies": {
     "@babel/cli": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
-    "async": "^2.6.2",
+    "async": "^3.2.2",
     "aws-lambda": "^0.1.2",
     "aws-sdk": "^2.437.0",
     "axios": "^0.19.0",
